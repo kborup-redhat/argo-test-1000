@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: guestbooks
+  namespace: openshift-gitops
+spec:
+  generators:
+    - git:
+        repoURL: https://github.com/kborup-redhat/argo-test-1000.git 
+        revision: HEAD
+        files:
+          - path: "guestbooks/value*.yaml"
+  template:
+    metadata:
+      name: '{{ path.filename }}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/kborup-redhat/argo-test-1000.git 
+        targetRevision: HEAD
+        path: helm-guestbook
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: argo-test
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true

@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: guestbook3
+  labels:
+    name: guestbook2
+spec:
+  destination:
+    name: ''
+    namespace: argo-test
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: guestbook
+    repoURL: 'https://github.com/kborup-redhat/argo-test-1000.git'
+    targetRevision: HEAD
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+  sources:
+    - repoURL: 'https://github.com/kborup-redhat/argo-test-1000.git'
+      targetRevision: HEAD
+      ref: guestbooks
+    - repoURL: 'https://github.com/kborup-redhat/argo-test-1000.git'
+      path: helm-guestbook
+      targetRevision: HEAD
+      helm:
+        valueFiles:
+          - $guestbooks/values-1.yaml
