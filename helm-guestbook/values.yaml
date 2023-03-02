@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: registry.redhat.io/rhel8/httpd-24 
-  tag: 1-248
+  tag: latest
   pullPolicy: IfNotPresent
 
 service:
